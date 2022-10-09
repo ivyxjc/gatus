@@ -1,6 +1,7 @@
 package alerting
 
 import (
+	"github.com/TwiN/gatus/v5/alerting/provider/lark"
 	"log"
 	"reflect"
 	"strings"
@@ -61,6 +62,8 @@ type Config struct {
 
 	// Slack is the configuration for the slack alerting provider
 	Slack *slack.AlertProvider `yaml:"slack,omitempty"`
+
+	Lark *lark.AlertProvider `yaml:"lark,omitempty"`
 
 	// Teams is the configuration for the teams alerting provider
 	Teams *teams.AlertProvider `yaml:"teams,omitempty"`
