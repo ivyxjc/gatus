@@ -7,6 +7,7 @@ import (
 	"github.com/TwiN/gatus/v4/alerting/provider/discord"
 	"github.com/TwiN/gatus/v4/alerting/provider/email"
 	"github.com/TwiN/gatus/v4/alerting/provider/googlechat"
+	"github.com/TwiN/gatus/v4/alerting/provider/lark"
 	"github.com/TwiN/gatus/v4/alerting/provider/matrix"
 	"github.com/TwiN/gatus/v4/alerting/provider/mattermost"
 	"github.com/TwiN/gatus/v4/alerting/provider/messagebird"
@@ -46,6 +47,8 @@ type Config struct {
 
 	// Slack is the configuration for the slack alerting provider
 	Slack *slack.AlertProvider `yaml:"slack,omitempty"`
+
+	Lark *lark.AlertProvider `yaml:"lark,omitempty"`
 
 	// Teams is the configuration for the teams alerting provider
 	Teams *teams.AlertProvider `yaml:"teams,omitempty"`
@@ -123,6 +126,11 @@ func (config Config) GetAlertingProviderByAlertType(alertType alert.Type) provid
 			return nil
 		}
 		return config.Slack
+	case alert.TypeLark:
+		if config.Lark == nil {
+			return nil
+		}
+		return config.Lark
 	case alert.TypeTeams:
 		if config.Teams == nil {
 			// Since we're returning an interface, we need to explicitly return nil, even if the provider itself is nil
