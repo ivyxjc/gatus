@@ -30,10 +30,13 @@ func handleAlertsToTrigger(endpoint *core.Endpoint, result *core.Result, alertin
 			continue
 		}
 		if endpointAlert.Triggered {
+			endpointAlert.TriggeredCount += 1
 			if debug {
-				log.Printf("[watchdog.handleAlertsToTrigger] Alert for endpoint=%s with description='%s' has already been TRIGGERED, skipping", endpoint.Name, endpointAlert.GetDescription())
+				log.Printf("[watchdog.handleAlertsToTrigger] Alert for endpoint=%s with description='%s' has already been TRIGGERED, skipping", endpoint.Name, endpointAlert.GetDescription(), endpointAlert.TriggeredCount)
 			}
-			continue
+			if endpointAlert.TriggeredCount%20 != 0 {
+				continue
+			}
 		}
 		alertProvider := alertingConfig.GetAlertingProviderByAlertType(endpointAlert.Type)
 		if alertProvider != nil {
@@ -66,6 +69,7 @@ func handleAlertsToResolve(endpoint *core.Endpoint, result *core.Result, alertin
 		// Even if the alert provider returns an error, we still set the alert's Triggered variable to false.
 		// Further explanation can be found on Alert's Triggered field.
 		endpointAlert.Triggered = false
+		endpointAlert.TriggeredCount = 0
 		if !endpointAlert.IsSendingOnResolved() {
 			continue
 		}

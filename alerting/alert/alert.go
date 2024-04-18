@@ -53,7 +53,8 @@ type Alert struct {
 	// applied for alerts that are already triggered and has become "healthy" again is to prevent a case where, for
 	// some reason, the alert provider always returns errors when trying to send the resolved notification
 	// (SendOnResolved).
-	Triggered bool `yaml:"-"`
+	Triggered      bool `yaml:"-"`
+	TriggeredCount int
 }
 
 // ValidateAndSetDefaults validates the alert's configuration and sets the default value of fields that have one
