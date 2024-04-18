@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/TwiN/gatus/v5/alerting/alert"
@@ -114,6 +115,8 @@ type Endpoint struct {
 
 	// UIConfig is the configuration for the UI
 	UIConfig *ui.Config `yaml:"ui,omitempty"`
+
+	Concurrency int `yaml:"concurrency,omitempty"`
 
 	// NumberOfFailuresInARow is the number of unsuccessful evaluations in a row
 	NumberOfFailuresInARow int `yaml:"-"`
@@ -274,8 +277,19 @@ func (endpoint *Endpoint) EvaluateHealth() *Result {
 		}
 	}
 	// Call the endpoint (if there's no errors)
+
 	if len(result.Errors) == 0 {
-		endpoint.call(result)
+		var wg sync.WaitGroup
+		if endpoint.Concurrency <= 1 {
+			wg.Add(1)
+			endpoint.call(result, &wg)
+		} else {
+			wg.Add(endpoint.Concurrency)
+			for i := 0; i < endpoint.Concurrency; i++ {
+				go endpoint.call(result, &wg)
+			}
+		}
+		wg.Wait()
 	} else {
 		result.Success = false
 	}
@@ -311,7 +325,8 @@ func (endpoint *Endpoint) getIP(result *Result) {
 	}
 }
 
-func (endpoint *Endpoint) call(result *Result) {
+func (endpoint *Endpoint) call(result *Result, wg *sync.WaitGroup) {
+	defer wg.Done()
 	var request *http.Request
 	var response *http.Response
 	var err error
