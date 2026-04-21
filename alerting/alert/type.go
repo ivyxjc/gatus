@@ -104,6 +104,8 @@ const (
 	// TypeSquadcast is the Type for the squadcast alerting provider
 	TypeSquadcast Type = "squadcast"
 
+	TypeLark Type = "lark"
+
 	// TypeTeams is the Type for the teams alerting provider
 	TypeTeams Type = "teams"
 

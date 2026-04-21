@@ -17,6 +17,7 @@ import (
 	"github.com/TwiN/gatus/v5/alerting/provider/ifttt"
 	"github.com/TwiN/gatus/v5/alerting/provider/ilert"
 	"github.com/TwiN/gatus/v5/alerting/provider/incidentio"
+	"github.com/TwiN/gatus/v5/alerting/provider/lark"
 	"github.com/TwiN/gatus/v5/alerting/provider/line"
 	"github.com/TwiN/gatus/v5/alerting/provider/matrix"
 	"github.com/TwiN/gatus/v5/alerting/provider/mattermost"
@@ -107,6 +108,7 @@ var (
 	_ AlertProvider = (*ifttt.AlertProvider)(nil)
 	_ AlertProvider = (*ilert.AlertProvider)(nil)
 	_ AlertProvider = (*incidentio.AlertProvider)(nil)
+	_ AlertProvider = (*lark.AlertProvider)(nil)
 	_ AlertProvider = (*line.AlertProvider)(nil)
 	_ AlertProvider = (*matrix.AlertProvider)(nil)
 	_ AlertProvider = (*mattermost.AlertProvider)(nil)

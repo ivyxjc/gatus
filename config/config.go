@@ -627,6 +627,7 @@ func ValidateAlertingConfig(alertingConfig *alerting.Config, endpoints []*endpoi
 		alert.TypeSlack,
 		alert.TypeSplunk,
 		alert.TypeSquadcast,
+		alert.TypeLark,
 		alert.TypeTeams,
 		alert.TypeTeamsWorkflows,
 		alert.TypeTelegram,

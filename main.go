@@ -21,6 +21,10 @@ const (
 	GatusLogLevelEnvVar   = "GATUS_LOG_LEVEL"
 )
 
+type NullWriter int
+
+func (NullWriter) Write([]byte) (int, error) { return 0, nil }
+
 func main() {
 	if delayInSeconds, _ := strconv.Atoi(os.Getenv("GATUS_DELAY_START_SECONDS")); delayInSeconds > 0 {
 		logr.Infof("Delaying start by %d seconds", delayInSeconds)
@@ -31,6 +35,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	logr.SetOutput(new(NullWriter))
 	initializeStorage(cfg)
 	start(cfg)
 	// Wait for termination signal
